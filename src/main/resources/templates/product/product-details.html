@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
+    <title>[[${product.productName}]]</title>
+</head>
+<body class="bg-color1 min-vh-100 d-flex flex-column">
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container flex-fill">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
+            <li class="breadcrumb-item">
+                <a th:href="@{|/catalog/${product.subcategory.category.cipher}|}">
+                    [[${product.subcategory.category.categoryName}]]
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a th:href="@{|/catalog/${product.subcategory.category.cipher}/${product.subcategory.cipher}/1|}">
+                    [[${product.subcategory.subcategoryName}]]
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">[[${product.productName}]]</li>
+        </ol>
+    </nav>
+    <h1>[[${product.productName}]]</h1>
+    <div class="bg-white">
+        <div class="row">
+            <div class="col-6 mr-4">
+                <div th:if="${product.files.size() <= 1}" class="img-container h-100 p-5">
+                    <img th:src="@{|/img/${product.files.size() == 0 ? 'no image.jpeg' : product.files.get(0).fileName}|}"
+                         th:alt="${product.productName}" class="img-details">
+                </div>
+
+                <div th:with="mainImage=${T(home.ecommerce.service.ImageService).getMainImageName(product.files)}"
+                     th:if="${product.files.size() > 1}" id="carouselExampleIndicators"
+                     class="carousel carousel-dark slide h-100" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        <div th:each="image, stat: ${product.files}"
+                             th:with="condition=${image.fileName == mainImage}"
+                             th:remove="tag">
+                            <button th:if="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
+                                    class="active" aria-current="true" th:data-bs-slide-to="${stat.index}"
+                                    th:aria-label="|Slide ${stat.index + 1}|">
+                            </button>
+                            <button th:unless="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
+                                    th:data-bs-slide-to="${stat.index}" th:aria-label="|Slide ${stat.index + 1}|">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-inner h-100">
+                        <div th:class="|carousel-item ${image.fileName == mainImage ? 'active' : ''}|"
+                             th:each="image, stat: ${product.files}">
+                            <div class="img-container h-100">
+                                <img th:src="@{|/img/${image.fileName}|}" th:alt="${product.productName}"
+                                     class="img-details">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-6 p-5">
+                <div class="mb-4">
+                    [[${product.description}]]
+                </div>
+                <div class="mb-4">
+                    Дата регистрации: [[${#dates.format(product.registerDate, 'dd MMMM yyyy')}]] года
+                </div>
+                <div class="product-stat mb-4">
+                    <a th:href="@{#}" class="stat-link">Звезды</a>
+                    <a th:href="@{#}" class="stat-link">Отзывы</a>
+                </div>
+                <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
+                     class="details-buy">
+                    <div class="row">
+                        <div class="col-8 d-flex align-items-center fw-bold fs-4">
+                            [[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] BYN
+                        </div>
+                        <div class="col-4 d-flex align-items-center details-buy-container">
+                            <button th:if="${condition}" class="btn-buy stat-link stat-link-active">
+                                В корзине
+                            </button>
+                            <button th:unless="${condition}" class="btn-buy stat-link w-100 justify-content-center" th:data-id="${product.id}">
+                                Купить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/layouts.html :: footer}"></footer>
+
+<script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/buy.js}"></script>
+</body>
+</html>

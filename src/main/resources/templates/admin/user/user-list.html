@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/admin-layout}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<div layout:fragment="content">
+    <div class="container text-center">
+        <h2>Пользователи</h2>
+
+        <div class="row mb-2">
+            <!-- ссылка на добавление нового пользователя -->
+            <div class="col-6 d-flex justify-content-start">
+                <a th:href="@{/admin/users/new}" class="stat-link stat-link-active">
+                    Добавить
+                </a>
+            </div>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Логин</th>
+                <th>Роль</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user: ${usersList}">
+                <tr>
+                    <td>[[${user.id}]]</td>
+                    <td>[[${user.username}]]</td>
+                    <td>[[${user.role}]]</td>
+                    <td th:if="${user.role.name() != 'ADMIN'}">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                Выбрать
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a th:href="@{|/admin/users/update/${user.id}|}" class="dropdown-item">
+                                        Изменить
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{|/admin/users/delete/${user.id}|}" class="dropdown-item">
+                                        Удалить
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

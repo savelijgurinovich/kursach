@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="common_head(title, links)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Webshop</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.2/dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.2.0/css/all.css}"/>
+    <th:block th:replace="${links}" />
+</head>
+<body>
+<header th:fragment="menu" class="sticky-top">
+    <div class="container-fluid bg-white">
+        <div class="container py-2">
+            <div class="row justify-content-between">
+                <div class="left-menu">
+                    <ul class="nav d-flex justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/catalog}">Каталог</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order-sm-4 w-100 d-none d-sm-block"></div>
+                <form th:action="@{/catalog/search?page=1}" method="post" class="col-md col-sm-12 order-lg-0 order-last d-flex">
+                    <div class="search-container d-flex w-100">
+                        <label for="search"><i class="fa-solid fa-search search-icon"></i></label>
+                        <input type="search" placeholder="Поиск по сайту" class="w-100" id="search" name="pn">
+                    </div>
+                </form>
+                <div class="right-menu">
+                    <ul class="nav d-flex justify-content-start">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false" th:text="${#authentication.getCredentials() == null ?
+                           #authentication.getName() : 'Личный кабинет'}">
+                                Личный кабинет
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li sec:authorize="isAnonymous()"><a th:href="@{/login}" class="dropdown-item">Войти</a>
+                                </li>
+                                <li sec:authorize="isAnonymous()"><a th:href="@{/register}" class="dropdown-item">Регистрация</a>
+                                </li>
+                                <li sec:authorize="isAuthenticated()"><a th:href="@{/bucket}" class="dropdown-item">Корзина</a>
+                                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" class="dropdown-item">Для админа</a>
+                                </li>
+                                <li sec:authorize="isAuthenticated()">
+                                    <form th:action="@{/logout}" method="post">
+                                        <button class="dropdown-item">Выйти</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<footer th:fragment="footer" class="bg-white text-center p-3">
+</footer>
+</body>
+</html>

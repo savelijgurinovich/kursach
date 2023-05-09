@@ -1,0 +1,57 @@
+@media (max-width: 767px) {
+    .multi-frame .carousel-inner .carousel-item > div {
+        display: none;
+    }
+    .multi-frame .carousel-inner .carousel-item > div:first-child {
+        display: block;
+    }
+}
+
+.multi-frame .carousel-inner .carousel-item.active,
+.multi-frame .carousel-inner .carousel-item-next,
+.multi-frame .carousel-inner .carousel-item-prev {
+    display: flex;
+}
+
+/* medium and up screens */
+@media (min-width: 768px) {
+
+    .multi-frame .carousel-inner .carousel-item-end.active,
+    .multi-frame .carousel-inner .carousel-item-next {
+        transform: translateX(25%);
+    }
+
+    .multi-frame .carousel-inner .carousel-item-start.active,
+    .multi-frame .carousel-inner .carousel-item-prev {
+        transform: translateX(-25%);
+    }
+}
+
+.multi-frame .carousel-inner .carousel-item-end,
+.multi-frame .carousel-inner .carousel-item-start {
+    transform: translateX(0);
+}
+
+.card {
+    overflow: hidden;
+}
+
+.multi-frame .carousel-control-next, .multi-frame .carousel-control-prev {
+    width: 2%;
+}
+
+.multi-frame .carousel-control-prev {
+    left: 10px;
+}
+
+.multi-frame .carousel-control-next {
+    right: 10px;
+}
+
+.multi-frame.carousel {
+    height: 150px;
+}
+
+.multi-frame .carousel-item-slide:hover {
+    border: 2px solid darkorange;
+}

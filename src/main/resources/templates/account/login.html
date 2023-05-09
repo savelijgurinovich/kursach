@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
+    <title>Авторизация</title>
+</head>
+<body class="min-vh-100 d-flex flex-column">
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container flex-fill d-flex justify-content-center align-items-center p-5">
+    <div class="col">
+        <div class="row justify-content-center">
+            <div class="col-4 bg-white common-border">
+                <div th:if = "${param.error}" class="text-center alert alert-warning">
+                    Неправильный логин или пароль
+                </div>
+
+                <div th:if = "${param.logout}" class="text-center alert alert-success">
+                    Вы вышли из аккаунта
+                </div>
+
+                <form th:action="@{/login}" method="post">
+                    <h1 class="display-4 text-center">Авторизация</h1>
+
+                    <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+                    <div class="col-12 py-1">
+                        <label for="inputUsername" class="form-label">Логин:</label>
+                        <input class="form-control" id="inputUsername" type="text" name="username">
+                    </div>
+                    <div class="col-12 py-1">
+                        <label for="inputPassword" class="form-label">Пароль:</label>
+                        <input class="form-control" id="inputPassword" type="password" name="password">
+                    </div>
+                    <div class="col-12 py-3">
+                        <button type="submit" class="stat-link stat-link-active w-100">Войти</button>
+                    </div>
+                    <div class="col-12 py-2 text-center">
+                        <span>Нет аккаунта? </span>
+                        <a th:href="@{/register}" class="fw-bold">Регистрация</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{layout/layouts.html :: footer}"></footer>
+</body>
+</html>
